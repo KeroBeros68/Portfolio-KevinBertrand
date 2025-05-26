@@ -1,12 +1,14 @@
 {
-  "name": "backend",
+  "name": "@apps/backend",
   "version": "1.0.0",
   "description": "",
   "license": "ISC",
   "author": "",
   "type": "commonjs",
   "main": "server.js",
-  "scripts": {
+  "scripts": {      
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
