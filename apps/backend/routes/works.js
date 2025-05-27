@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const worksCtrl = require('../controllers/works');
+const optimizeImg = require('../middlewares/optimizeImg');
 
 router.post('/',worksCtrl.createWork);
 router.get('/', worksCtrl.getAllWork);
 
-router.delete('/',auth , worksCtrl.deleteOneWork);
-/* router.get('/lastworking', worksCtrl.getLastWorking);
-router.get('/:id', worksCtrl.getOneWork);
- */
+router.delete('/',auth, multer, optimizeImg, worksCtrl.deleteOneWork);
+
 
 module.exports = router;
