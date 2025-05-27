@@ -9,7 +9,7 @@ git pull origin main
 
 # Déploiement du backend
 cd apps/backend
-npm install --production
+npm install
 pm2 restart backend || pm2 start index.js --name backend
 
 # Déploiement du frontend
