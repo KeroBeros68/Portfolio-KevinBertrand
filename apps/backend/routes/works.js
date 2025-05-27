@@ -3,6 +3,8 @@ const router = express.Router();
 const worksCtrl = require('../controllers/works');
 
 router.get('/', worksCtrl.getAllWork);
+
+router.delete('/', worksCtrl.deleteOneWork);
 /* router.get('/lastworking', worksCtrl.getLastWorking);
 router.get('/:id', worksCtrl.getOneWork);
  */

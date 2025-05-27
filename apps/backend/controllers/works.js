@@ -11,6 +11,32 @@ exports.getAllWork = (req, res, next) => {
         });
 };
 
+exports.deleteOneWork = (req, res, next) => {
+    Work.findOne({ _id: req.params.id })
+        .then(work => {
+            if (work.userId != req.auth.userId) {
+                logger.warn(`User ${req.auth.userId} unauthorized for work ${work._id}`);
+                return res.status(401).json({message: 'Not authorized'});
+            } else {
+                Work.deleteOne({ _id: req.params.id })
+                    .then(() => {
+                        /* const filename = work.imageUrl.split('/images/')[1];
+                        fs.unlink(`images/${filename}`, (err) => { if (err) throw err}); */
+                        logger.info(`Work ${work._id} deleted by ${req.auth.userId}`);
+                        res.status(200).json({ message: 'Projet supprimé !'});
+                    })
+                    .catch(error => {
+                        logger.error(error);
+                        res.status(400).json({ error });
+                    })
+            }
+        })
+        .catch( error => {
+            logger.error(error);
+            res.status(500).json({ error });
+        });
+};
+
 
 /* exports.createBook = (req, res, next) => {
     const bookObject = JSON.parse(req.body.book);
@@ -118,45 +144,6 @@ exports.modifyBook = (req, res, next) => {
             logger.error(error);
             res.status(400).json({ error });
         });
-};
-
-exports.deleteOneBook = (req, res, next) => {
-    Book.findOne({ _id: req.params.id })
-        .then(book => {
-            if (book.userId != req.auth.userId) {
-                logger.warn(`User ${req.auth.userId} unauthorized for book ${book._id}`);
-                return res.status(401).json({message: 'Not authorized'});
-            } else {
-                Book.deleteOne({ _id: req.params.id })
-                    .then(() => {
-                        const filename = book.imageUrl.split('/images/')[1];
-                        fs.unlink(`images/${filename}`, (err) => { if (err) throw err});
-                        logger.info(`Book ${book._id} deleted by ${req.auth.userId}`);
-                        res.status(200).json({ message: 'Objet supprimé !'});
-                    })
-                    .catch(error => {
-                        logger.error(error);
-                        res.status(400).json({ error });
-                    })
-            }
-        })
-        .catch( error => {
-            logger.error(error);
-            res.status(500).json({ error });
-        });
-};
-
-exports.getBestRating = async (req, res, next) => {
-    try {
-        const topBooks = await Book.find()
-            .sort({ averageRating: -1 })
-            .limit(3);
-
-        res.status(200).json(topBooks);
-    } catch (error) {
-        logger.error(error);
-        res.status(500).json({ error: "Erreur serveur"});
-    }
 };
 
 
