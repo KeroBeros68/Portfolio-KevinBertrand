@@ -71,42 +71,6 @@ exports.deleteOneWork = (req, res, next) => {
       );
 };
 
-exports.addBookRating = (req, res, next) => {
-    const userId = req.auth.userId;
-    const rating = req.body.rating;
-
-    Book.findOne({ _id: req.params.id })
-            .then( book => {
-                if (!book) {
-                    logger.info(`Book unknown : ${req.params.id}`);
-                    return res.status(404).json({ message: "Livre non trouvé" });
-                }
-                if (book.ratings.some(user => user.userId === userId)) {
-                    logger.info(`Book ${req.params.id} already rated by ${userId}`);
-                    return res.status(400).json({ message: "Vous avez déjà noté ce livre."});
-                }
-                Book.findOneAndUpdate(
-                    { _id: req.params.id },
-                    { 
-                        $push: { ratings: { userId: userId, grade: rating } },
-                        $set: { averageRating: ((book.averageRating * book.ratings.length + rating) / (book.ratings.length + 1)).toFixed(2) }
-                    },
-                    { new: true }
-                )
-                    .then(updatedBook => {
-                        logger.info(`Book ${book._id} updated by ${req.auth.userId}`);
-                        res.status(200).json(updatedBook);
-                    })
-                    .catch(error => {
-                        logger.error(error);
-                        res.status(500).json({ message: "Erreur interne, réessayez plus tard." });
-                    });
-            })
-            .catch(error => {
-                logger.error(error);
-                res.status(500).json({ message: "Erreur interne, réessayez plus tard." });
-            });
-};
 
 exports.modifyBook = (req, res, next) => {
     const bookObject = req.file ? {

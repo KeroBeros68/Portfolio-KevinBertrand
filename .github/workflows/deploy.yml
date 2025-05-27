@@ -1,0 +1,42 @@
+name: Déploiement sur VPS
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v2
+
+      - name: Configuration de la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST }} >> ~/.ssh/known_hosts
+
+      - name: Déploiement sur le VPS
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
+            # Variables
+            APP_DIR="/chemin/vers/votre/application"  # Remplacez par le chemin absolu sur votre VPS
+            cd $APP_DIR
+
+            # Mettre à jour le code
+            git pull origin main
+
+            # Déploiement du backend
+            cd apps/backend
+            npm install --production
+            pm2 restart backend || pm2 start index.js --name backend
+
+            # Déploiement du frontend
+            cd ../frontend
+            npm install
+            npm run build
+            pm2 restart frontend || pm2 start npm --name frontend -- start
+          EOF

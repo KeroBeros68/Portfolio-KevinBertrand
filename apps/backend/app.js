@@ -32,8 +32,7 @@ app.use((req, res, next) => {
   });
   
 app.use(santizeReq);
-// app.use('/api/works', worksRoutes);
-// app.use('/api/auth', userRoutes);
+app.use('/api/works', worksRoutes);
 // app.use('/api/auth', userRoutes);
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
