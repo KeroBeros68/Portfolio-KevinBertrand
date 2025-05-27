@@ -2,6 +2,36 @@ const logger = require('../config/logger');
 const Work = require('../models/work');
 const fs = require('fs');
 
+exports.createWork = (req, res, next) => {
+    const workObject = JSON.parse(req.body.work);
+    delete workObject._id;
+    delete workObject._userId;
+    const work = new Work({
+        ...workObject,
+        userId: req.auth.userId,
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+    });
+    work.save().then(
+        () => {
+          res.status(201).json({
+            message: 'Work saved successfully!'
+          });
+          logger.info(`Work created by ${req.auth.userId}`)
+        }
+      ).catch(
+        (error) => {
+            if (req.file.path) {
+                fs.unlinkSync(req.file.path);
+                logger.info('The temporary file has been deleted!');
+            };
+          res.status(400).json({
+            error: error
+          });
+          logger.error(error);
+        }
+      );
+};
+
 exports.getAllWork = (req, res, next) => {
     Work.find()
         .then(works => res.status(200).json(works))
@@ -38,38 +68,7 @@ exports.deleteOneWork = (req, res, next) => {
 };
 
 
-/* exports.createBook = (req, res, next) => {
-    const bookObject = JSON.parse(req.body.book);
-    delete bookObject._id;
-    delete bookObject._userId;
-    const book = new Book({
-        ...bookObject,
-        userId: req.auth.userId,
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-        ratings: bookObject.ratings.map((rating, index) =>
-            index === 0 ? { ...rating, userId: req.auth.userId } : rating
-        ),
-    });
-    book.save().then(
-        () => {
-          res.status(201).json({
-            message: 'Book saved successfully!'
-          });
-          logger.info(`Book created by ${req.auth.userId}`)
-        }
-      ).catch(
-        (error) => {
-            if (req.file.path) {
-                fs.unlinkSync(req.file.path);
-                logger.info('The temporary file has been deleted!');
-            };
-          res.status(400).json({
-            error: error
-          });
-          logger.error(error);
-        }
-      );
-};
+/* 
 
 
 exports.modifyBook = (req, res, next) => {

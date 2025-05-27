@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const worksCtrl = require('../controllers/works');
 
+router.post('/',worksCtrl.createWork);
 router.get('/', worksCtrl.getAllWork);
 
 router.delete('/', worksCtrl.deleteOneWork);
