@@ -1,5 +1,5 @@
 const logger = require('../config/logger');
-const Work = require('../models/Work');
+const Work = require('../models/work');
 const fs = require('fs');
 
 exports.getAllWork = (req, res, next) => {
