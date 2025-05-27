@@ -21,19 +21,5 @@ jobs:
 
       - name: Déploiement sur le VPS
         run: |
-          ssh -T -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} << 'EOF'
-            # Variables
-            APP_DIR="/var/www/Portfolio-KevinBertrand"  # Remplacez par le chemin absolu sur votre VPS
-            cd $APP_DIR
-            # Mettre à jour le code
-            git pull origin main
-            # Déploiement du backend
-            cd apps/backend
-            npm install --production
-            pm2 restart backend || pm2 start index.js --name backend
-            # Déploiement du frontend
-            cd ../frontend
-            npm install
-            npm run build
-            pm2 restart frontend || pm2 start npm --name frontend -- start
-EOF
+          scp -i ~/.ssh/id_rsa deploy.sh ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/tmp/deploy.sh
+          ssh -i ~/.ssh/id_rsa ${{ secrets.USERNAME }}@${{ secrets.HOST }} "bash /tmp/deploy.sh"
