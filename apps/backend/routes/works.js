@@ -5,7 +5,7 @@ const worksCtrl = require('../controllers/works');
 router.post('/',worksCtrl.createWork);
 router.get('/', worksCtrl.getAllWork);
 
-router.delete('/', worksCtrl.deleteOneWork);
+router.delete('/',auth , worksCtrl.deleteOneWork);
 /* router.get('/lastworking', worksCtrl.getLastWorking);
 router.get('/:id', worksCtrl.getOneWork);
  */
