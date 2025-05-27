@@ -39,4 +39,4 @@ jobs:
             npm install
             npm run build
             pm2 restart frontend || pm2 start npm --name frontend -- start
-          EOF 
+EOF
