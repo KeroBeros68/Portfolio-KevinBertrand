@@ -6,14 +6,3 @@ APP_DIR="/var/www/Portfolio-KevinBertrand"  # Remplacez par le chemin absolu sur
 
 cd $APP_DIR
 git pull origin main
-
-# Déploiement du backend
-cd apps/backend
-npm install
-pm2 restart backend || pm2 start server.js --name backend
-
-# Déploiement du frontend
-cd ../frontend
-npm install
-npm run build
-pm2 restart frontend || pm2 start npm --name frontend -- start
