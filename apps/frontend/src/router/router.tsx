@@ -1,11 +1,12 @@
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom'
+import Home from '../pages/home'
 
 function Router() {
   return (
     <Routes>
-      <Route element={<div>coucou</div>} path="/" />
+      <Route path='/' element={<Home />} />
     </Routes>
-  );
+  )
 }
 
-export default Router;
+export default Router
