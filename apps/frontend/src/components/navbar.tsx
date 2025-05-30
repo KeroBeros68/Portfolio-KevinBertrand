@@ -1,3 +1,4 @@
+import { useLocation } from 'react-router-dom'
 import { Link } from '@heroui/link'
 import {
   Navbar as HeroUINavbar,
@@ -17,31 +18,45 @@ import { TwitterIcon, GithubIcon } from '@/components/icons'
 import Logo from '@/assets/logo/LogoKevin.svg'
 
 export const Navbar = () => {
+  const location = useLocation()
+  const pathname = location.pathname
+
   return (
-    <HeroUINavbar isBordered shouldHideOnScroll maxWidth='xl' position='sticky'>
-      <NavbarContent className='' justify='start'>
-        <NavbarBrand className='max-w-fit gap-3'>
-          <Link
-            className='flex items-center justify-start gap-1'
-            color='foreground'
-            href='/'
-          >
-            <Image alt='logo de Kevin Bertrand' src={Logo} width={300} />
-          </Link>
-        </NavbarBrand>
-      </NavbarContent>
+    <HeroUINavbar
+      isBordered
+      shouldHideOnScroll
+      classNames={{
+        item: [
+          'flex',
+          'relative',
+          'items-center',
+          "data-[active=true]:after:content-['']",
+          'data-[active=true]:after:absolute',
+          'data-[active=true]:after:bottom-0',
+          'data-[active=true]:after:left-0',
+          'data-[active=true]:after:right-0',
+          'data-[active=true]:after:h-[3px]',
+          'data-[active=true]:after:rounded-[2px]',
+          'data-[active=true]:after:bg-cyan-600',
+        ],
+      }}
+      maxWidth='xl'
+      position='sticky'
+    >
+      <NavbarBrand className='max-w-fit gap-3'>
+        <Link
+          className='flex items-center justify-start gap-1'
+          color='foreground'
+          href='/'
+        >
+          <Image alt='logo de Kevin Bertrand' src={Logo} width={200} />
+        </Link>
+      </NavbarBrand>
       <NavbarContent className='sm:w-1/3' justify='center'>
-        <div className='ml-2 hidden justify-start gap-4 sm:flex'>
+        <div className='ml-2 hidden h-full justify-start gap-4 sm:flex'>
           {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
-              <Link
-                className={clsx(
-                  linkStyles({ color: 'foreground' }),
-                  'data-[active=true]:text-primary data-[active=true]:font-medium',
-                )}
-                color='foreground'
-                href={item.href}
-              >
+            <NavbarItem key={item.href} data-active={pathname === item.href}>
+              <Link className='text-xl' color='foreground' href={item.href}>
                 {item.label}
               </Link>
             </NavbarItem>

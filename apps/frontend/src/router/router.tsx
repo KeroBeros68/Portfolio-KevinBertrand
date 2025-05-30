@@ -8,6 +8,8 @@ function Router() {
     <Routes>
       <Route element={<IndexPage />} path='/' />
       <Route element={<AboutPage />} path='/about' />
+      <Route element={<AboutPage />} path='/projects' />
+      <Route element={<AboutPage />} path='*' />
     </Routes>
   )
 }
