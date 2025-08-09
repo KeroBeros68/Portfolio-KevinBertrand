@@ -7,6 +7,6 @@ const auth = require('../middlewares/auth')
 router.post('/', worksCtrl.createWork)
 router.get('/', worksCtrl.getAllWork)
 
-router.delete('/', auth, multer, optimizeImg, worksCtrl.deleteOneWork)
+router.delete('/', auth, worksCtrl.deleteOneWork)
 
 module.exports = router
