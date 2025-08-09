@@ -43,7 +43,7 @@ export const Navbar = () => {
       maxWidth='xl'
       position='sticky'
     >
-      <NavbarBrand className='max-w-fit gap-3'>
+      <NavbarBrand className='min-w-[200px] gap-3'>
         <Link
           className='flex items-center justify-start gap-1'
           color='foreground'
@@ -52,7 +52,7 @@ export const Navbar = () => {
           <Image alt='logo de Kevin Bertrand' src={Logo} width={200} />
         </Link>
       </NavbarBrand>
-      <NavbarContent className='sm:w-1/3' justify='center'>
+      <NavbarContent className='sm:w-full' justify='center'>
         <div className='ml-2 hidden h-full justify-start gap-4 sm:flex'>
           {siteConfig.navItems.map((item) => (
             <NavbarItem key={item.href} data-active={pathname === item.href}>
@@ -64,7 +64,7 @@ export const Navbar = () => {
         </div>
       </NavbarContent>
 
-      <NavbarContent className='hidden w-1/3 sm:flex' justify='end'>
+      <NavbarContent className='hidden sm:flex' justify='end'>
         <NavbarItem className='hidden gap-2 sm:flex'>
           <Link isExternal href={siteConfig.links.twitter} title='Twitter'>
             <TwitterIcon className='text-default-500' />
